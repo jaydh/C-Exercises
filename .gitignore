@@ -9,7 +9,7 @@
 *.opensdf
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+*.opensdf
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

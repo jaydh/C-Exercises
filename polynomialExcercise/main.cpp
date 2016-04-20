@@ -18,10 +18,11 @@ a dynamic array/vector/list of double to store the coefficients; a destructor; a
 class Polynomial {
 public:
 	//Constructor for Polynomial. Sets default degree and coeffecient to 0, which represents the zero element. Sets default variable to 'x'
-	Polynomial(int newDegree = 0, std::valarray<double> newCoefficients = { 0 }, char newVariable = 'x') {
-		//Checks if the given degree is 
-		assert(newDegree == (newCoefficients.size() - 1));
-		degree = newDegree;
+	Polynomial(std::valarray<double> newCoefficients = { 0 }, char newVariable = 'x') {
+		//Checks if the given polynomial representaiton has nonnegative degree
+		assert(newCoefficients.size() > 0);
+		
+		degree = newCoefficients.size();
 		coefficients = newCoefficients;
 		variable = newVariable;
 	}
@@ -46,7 +47,7 @@ private:
 };
 
 int main() {
-	Polynomial P(6, { 1,2,0,-35,4,3,-2 });
+	Polynomial P({ 1,2,0,-35,4,3,-2 });
 	P.output(std::cout);
 	char c;
 	std::cin >> c;

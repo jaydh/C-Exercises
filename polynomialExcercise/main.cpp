@@ -21,7 +21,7 @@ a dynamic array/vector/list of double to store the coefficients; a destructor; a
 
 class Polynomial {
 public:
-	//Constructor for Polynomial. Sets default degree and coeffecient to 0, which represents the zero element. Sets default variable to 'x'
+	//Default constructor for Polynomial. Sets default coefficients to 0, representing the zero polynomial. Sets default variable to 'x'
 	Polynomial(std::valarray<double> newCoefficients = { 0 }, char newVariable = 'x') {
 		//Checks if the given polynomial representaiton has nonnegative degree
 		assert(newCoefficients.size() > 0);
@@ -45,15 +45,17 @@ public:
 		//Checks if polynomials have the same degree or if the current polynomial is the 0 polynomial
 		assert(degree == src.degree || (degree == 0 && coefficients[0] == 0));
 		std::swap(coefficients, src.coefficients);
+		std::cout << "operator was used and here is it's output ";
+		output(std::cout);
 		return *this;
 	}
 
 	void output(std::ostream& o) {
-		for (int j = 0; j != degree + 1; ++j) {
+		for (int j =1; j != degree + 1; ++j) {
 			//Omit coefficients with value 0
-			if (coefficients[j] == 0) { continue; }
+			if (coefficients[j-1] == 0) { continue; }
 
-			o << "+(" << coefficients[j] << variable << "^" << degree - j << ") ";
+			o << "+(" << coefficients[j-1] << variable << "^" << degree - j << ") ";
 			//Adds trailing paranethesis
 			if (j == degree) {
 				o << ")";
@@ -68,13 +70,16 @@ private:
 };
 
 Polynomial makeTwoDegreePoly(double c2, double c1, double c0) {
-	Polynomial temp({ c2,c1,c0 });
-
+	Polynomial p({ c2,c1,c0 });
+	return p;
 }
 
 int main() {
+
 	Polynomial P({ 1,2,0,-35,4,3,-2 });
 	P.output(std::cout);
+	
+
 	char c;
 	std::cin >> c;
 	return 0;

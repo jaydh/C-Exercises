@@ -11,7 +11,9 @@
 *.userprefs
 *.opensdf
 *.VC.opendb 
+*VC.VC.opendb 
 *.VC.db
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

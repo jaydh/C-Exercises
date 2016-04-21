@@ -31,19 +31,22 @@ public:
 		std::copy(std::begin(newCoefficients), std::end(newCoefficients), std::begin(coefficients));
 	}
 	
-	//Initializer list assignment operator to copy passed in list to coefficients
-	Polynomial& operator=(std::initializer_list<double> values) {
-		assert(degree == values.size() - 1);
-		std::copy(std::begin(values), std::end(values), std::begin(coefficients));
-		return *this;
-	}
-
 	//Move Constructor
 	Polynomial(Polynomial&& p)
 		:degree(p.degree), coefficients(p.coefficients), variable(p.variable) {
 		p.degree = 0;
 		p.coefficients = { 0 };
 		p.variable = 'x';
+	}
+
+	//Destructor
+	~Polynomial() {}
+
+	//Initializer list assignment operator to copy passed in list to coefficients
+	Polynomial& operator=(std::initializer_list<double> values) {
+		assert(degree == values.size() - 1);
+		std::copy(std::begin(values), std::end(values), std::begin(coefficients));
+		return *this;
 	}
 
 	//Move assignment operator
@@ -55,25 +58,22 @@ public:
 		std::swap(coefficients, src.coefficients);
 		return *this;
 	}
-
-	//Destructor
-	~Polynomial() {}
 	
 	//Sends a polynomial representation to an outstream. 
 	void output(std::ostream& o) {
 		int currentDegree = degree;
-		for (auto x: coefficients) {
+		for (auto c: coefficients) {
+
 			//Omit coefficients with value 0
-			if (x == 0) { 
+			if (c == 0) { 
 				currentDegree--;
 				continue;
 			}
-			o << "+(" << x << variable << "^" << currentDegree-- << ") ";
-			
-			//Adds trailing paranethesis
-			if (currentDegree == 0) {
-				o << ")";
+			if (currentDegree != degree) {
+				o << " + ";
 			}
+			//Element of polynomial represented as c^e , for coefficient c and exponent e
+			o << "(" << c << variable << "^" << currentDegree-- << ")";
 		};
 	}
 

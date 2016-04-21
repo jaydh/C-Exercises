@@ -9,7 +9,6 @@ a dynamic array/vector/list of double to store the coefficients; a destructor; a
 2.8.3 Expand the program with a constructor and an assignment operator for a initializer list. The degree of the polynomial hsould be the length of the initializer list minus one afterward.
 */
 
-#pragma once
 
 #include<valarray>
 #include<string>
@@ -26,7 +25,7 @@ public:
 		//Checks if the given polynomial representaiton has nonnegative degree
 		assert(newCoefficients.size() > 0);
 		
-		degree = newCoefficients.size();
+		degree = newCoefficients.size() - 1;
 		coefficients = newCoefficients;
 		variable = newVariable;
 	}
@@ -44,23 +43,33 @@ public:
 	Polynomial& operator=(Polynomial&& src) {
 		//Checks if polynomials have the same degree or if the current polynomial is the 0 polynomial
 		assert(degree == src.degree || (degree == 0 && coefficients[0] == 0));
+		
+		std::swap(degree, src.degree);	
 		std::swap(coefficients, src.coefficients);
-		std::cout << "operator was used and here is it's output ";
-		output(std::cout);
 		return *this;
 	}
 
 	void output(std::ostream& o) {
-		for (int j =1; j != degree + 1; ++j) {
+		int currentDegree = degree;
+		for (int j = 0; j != (degree + 1); ++j) {
 			//Omit coefficients with value 0
-			if (coefficients[j-1] == 0) { continue; }
-
-			o << "+(" << coefficients[j-1] << variable << "^" << degree - j << ") ";
+			if (coefficients[j] == 0) { 
+				currentDegree--;
+				continue;
+			}
+			o << "+(" << coefficients[j] << variable << "^" << currentDegree-- << ") ";
+			
 			//Adds trailing paranethesis
 			if (j == degree) {
 				o << ")";
 			}
 		};
+	}
+	
+	void printVal(std::valarray<double> v) {
+		for (auto x : v) {
+			std::cout << x << "\n";
+		}
 	}
 
 private:
@@ -74,11 +83,16 @@ Polynomial makeTwoDegreePoly(double c2, double c1, double c0) {
 	return p;
 }
 
+
 int main() {
 
 	Polynomial P({ 1,2,0,-35,4,3,-2 });
 	P.output(std::cout);
+	std::cout << "\n";
 	
+	Polynomial toMove;
+	toMove = makeTwoDegreePoly(1, 90, 4);
+	toMove.output(std::cout);
 
 	char c;
 	std::cin >> c;

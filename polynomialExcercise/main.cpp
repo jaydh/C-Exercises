@@ -18,7 +18,7 @@ a dynamic array/vector/list of double to store the coefficients; a destructor; a
 #include<initializer_list>
 
 
-//Polynomial class that implements valarray to store coefficeints to allow for element-wise operations, i.e. you want to add/subtract coefficients of same-degree variables. Polynomials should be in expanded form(e.g. x^5 + 0x^4 + 0x^3... +2x)
+//Polynomial class that implements valarray to store coefficeints to allow for element-wise operations, i.e. you want to add/subtract coefficients of same-degree variables. Polynomials should be in expanded form(e.g. x^5 + 0x^4 + 0x^3... +2x^0)
 
 class Polynomial {
 public:
@@ -63,12 +63,12 @@ public:
 	void output(std::ostream& o) {
 		int currentDegree = degree;
 		for (auto c: coefficients) {
-
 			//Omit coefficients with value 0
 			if (c == 0) { 
 				currentDegree--;
 				continue;
 			}
+			//Adds addition signs between elements that aren't the first in the sequence
 			if (currentDegree != degree) {
 				o << " + ";
 			}

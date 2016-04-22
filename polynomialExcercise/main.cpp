@@ -100,7 +100,6 @@ int main() {
 	toMove = makeTwoDegreePoly(1, 90, 4);
 	toMove.output(std::cout);
 
-	char c;
-	std::cin >> c;
+	std::cin.get();
 	return 0;
 }

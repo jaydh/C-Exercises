@@ -21,10 +21,12 @@ inline string to_string(const T& from) {
 	return to.str();
 }
 
+//Zero parameter tuple string represenation
 inline string to_tuple() { return "()"; }
-
+//Single parameter tuple string represenation
 template <typename T>
 inline string to_tuple(T t) { return "(" + to_string(t) + ")"; }
+//More than one parameter tuple string representation
 template <typename T, typename ...P>
 inline string to_tuple(T t, P ...p) { return "(" + to_tuple_string_aux(t, p...) + ")"; }
 

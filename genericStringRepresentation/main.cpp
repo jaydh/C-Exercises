@@ -24,16 +24,17 @@ inline string to_string(const T& from) {
 inline string to_tuple() { return "()"; }
 
 template <typename T>
-inline string to_tuple(T t) { return to_string(t); }
-
+inline string to_tuple(T t) { return "(" + to_string(t) + ")"; }
 template <typename T, typename ...P>
-inline string to_tuple(T t,P ... p) { return to_tuple_string_aux(t, p...) + to_tuple(p...); }
+inline string to_tuple(T t, P ...p) { return "(" + to_tuple_string_aux(t, p...) + ")"; }
 
-//Auxiliary
-template<typename T>
-inline string to_tuple_string_aux(T t) { return "(" + to_string(t) + ")"; }
-template<typename T, typename ...P>
-inline string to_tuple_string_aux(T t, P ...p) { return to_string(t) + ", "; }
+//Auxiliary methods that do the recursion calls for the inside of the tuples.
+template <typename T>
+inline string to_tuple_string_aux(T t) { return to_string(t); }
+template <typename T, typename ...P>
+inline string to_tuple_string_aux(T t, P ...p) { return to_string(t) + ", " + to_tuple_string_aux(p...); }
+
+
 
 int main() {
 	auto testString = "This is a string";
@@ -43,7 +44,7 @@ int main() {
 	cout << to_string(testString) << endl << to_string(testChar) << endl << to_string(testInt) << endl << to_string("This is an rvalue") << endl;
 
 	cout << to_tuple("this is a single argumetn to tuple") << endl;
-	cout << to_tuple("this is a tuple", "from a variadic template." ," take 3", 12) << endl;
+	cout << to_tuple("this is a tuple", "from a variadic template." ,3.0, 12,'c') << endl;
 	system("PAUSE");
 	return 0;
 }

@@ -24,6 +24,8 @@ public:
 	
 	//Pops from the stack with a temp variable
 	T pop() { 
+		if (stack.empty()) throw underflow_error;
+
 		auto toPop = the_stack.back();
 		the_stack.pop_back();
 		return toPop;
@@ -32,7 +34,7 @@ public:
 	//Pushes onto the stack. Checks to make sure container doesn't exceed the size and if passed in element matches the type in the stack.
 	template<typename P>
 	void push(P p) { 
-		assert(the_stack.size() <= the_max_size);
+		if (stack.full()) throw overflow_error;
 		assert(typeid(T) == typeid(P));
 		the_stack.push_back(p); 
 	}

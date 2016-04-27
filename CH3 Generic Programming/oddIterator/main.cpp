@@ -16,7 +16,7 @@ public:
 	odd_iterator(int i = 1) : value(i) {
 		if (i % 2 == 0) {throw invalid_argument("Recieved even value");}
 	}
-	odd_iterator(const odd_iterator& other) {
+	odd_iterator(const odd_iterator& other){
 		value = other.value;
 	}
 	
@@ -48,6 +48,8 @@ int main() {
 	if (o2 == o3) { cout << "still working" << endl; }
 	if (++o1 == o3) { cout << "doubly nice" << endl; }
 	cout << "The third odd_iterator is " << *o3 << endl;
+	odd_iterator o4(o3);
+	cout << "The fourth odd_iterator copied the third one and should be " << *o3 << ", it is " << *o4 << endl;
 
 	system("pause");
 	return 0;

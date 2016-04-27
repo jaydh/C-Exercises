@@ -5,6 +5,9 @@ operator++ to the next odd element, as pre-increment and post-increment;
 operator* as dereference which returns an (odd) int;
 operator== and operator!=; and operator =. 
 In addition, the class should contain a constructor that accepts an int value. This value will be returned in the dereference operator (as long as the iterator is not incremented). This constructor should throw an exception if the value is even. Likewise the default constructor should initialize the internal value with 1 to provide a legal state.
+
+Excercise 3.11.6 Odd Range
+Write a class for a range of odd numbers. The member or free functiosn begin and end should return an odd_iterator as defined in Excercise 3.11.5.
 */
 
 #include<vector>
@@ -39,6 +42,19 @@ private :
 	int value;
 };
 
+class odd_range {
+public:
+	odd_range(int f = 1, int t = 1) :from(f), to(t)  {
+		if (f > t) { throw invalid_argument("Invalid range, lhs is larger than rhs."); }
+	}
+
+	odd_iterator begin() const { return odd_iterator(from);}
+	odd_iterator end() const { return odd_iterator(to); }
+private:
+	int from;
+	int to;
+};
+
 int main() {
 	odd_iterator o1(1);
 	odd_iterator o2(1);
@@ -50,6 +66,10 @@ int main() {
 	cout << "The third odd_iterator is " << *o3 << endl;
 	odd_iterator o4(o3);
 	cout << "The fourth odd_iterator copied the third one and should be " << *o3 << ", it is " << *o4 << endl;
+
+	for (int i : odd_range(7, 27)) {
+		cout << i << "\n";
+	}
 
 	system("pause");
 	return 0;

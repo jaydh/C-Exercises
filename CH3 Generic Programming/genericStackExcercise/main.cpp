@@ -57,9 +57,28 @@ template<>
 class genStack<bool> {
 public:
 
+	//Proxy class copied from p.138
+	class bool_proxy {
+	public:
+		bool_proxy(unsigned char& byte, int p) : byte(byte), mask(1 << p) {}
+		operator bool() const { return byte & mask; }
+		bool_proxy& operator=(bool b) {
+			if (b) byte |= mask;
+			else byte &= ~mask;
+			return *this;
+		}
+	private:
+		unsigned char& byte;
+		unsigned char mask;
+	};
+
 	explicit genStack(int size = 0) : the_max_size(size), the_stack(new unsigned char[(the_max_size + 7) / 8 ]) {}
 	~genStack() { the_stack.reset; }
+	 
 
+	inline unsigned char top() {	
+		auto temp = the_stack.get();
+	}
 	
 private:
 	int the_max_size;

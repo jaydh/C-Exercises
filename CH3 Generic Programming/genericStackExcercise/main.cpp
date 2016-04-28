@@ -3,6 +3,9 @@ Excercise 3.11.3 Generic Stack
 Write a stack implementaiton for a generic value type. The maximal size of the stack is defined in the class (hard-wired). Provide the following functions: Constructor, Destructor if necessary, top:show last element, pop: remove last element (without returning), push: insert new element, clear: delete all entries, size: number of elements, full: whether a stack is full, empty: whether a stack is empty.
 
 I interpret the problem to mean the stack can contain any value type, but only one. 
+
+3.11.7 Stack of bool
+Specialize your stack implementation from Exercise 3.11.3 for bool. Use an unsigned char for 8 bool as in Section 3.6.1.
 */
 
 #include<assert.h>
@@ -16,11 +19,11 @@ using namespace std;
 template<typename T>
 class genStack{
 public:
-	explicit genStack(int maxSize) :the_max_size(maxSize) { }
+	explicit genStack(int size = 0) :the_max_size(size) { }
 	~genStack() {clear();}
 
 	//Returns a copy of the top element
-	T& top() { return the_stack.back(); }
+	T& top() const { return the_stack.back(); }
 	
 	//Pops from the stack with a temp variable
 	T pop() { 
@@ -48,6 +51,21 @@ private:
 	const int the_max_size;
 	vector<T> the_stack;
 };
+
+
+template<>
+class genStack<bool> {
+public:
+
+	explicit genStack(int size = 0) : the_max_size(size), the_stack(new unsigned char[(the_max_size + 7) / 8 ]) {}
+	~genStack() { the_stack.reset; }
+
+	
+private:
+	int the_max_size;
+	unique_ptr<unsigned char[]> the_stack;
+};
+
 
 int main() {
 	genStack<string> G(255);

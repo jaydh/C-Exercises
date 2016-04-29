@@ -8,6 +8,7 @@ I interpret the problem to mean the stack can contain any value type, but only o
 Specialize your stack implementation from Exercise 3.11.3 for bool. Use an unsigned char for 8 bool as in Section 3.6.1.
 */
 
+#include<stdexcept>
 #include<assert.h>
 #include<vector>
 #include<string>
@@ -27,7 +28,7 @@ public:
 	
 	//Pops from the stack with a temp variable
 	T pop() { 
-		//if (empty()) throw underflow_error;
+		if (empty()) throw out_of_range("Stack underflow");
 
 		auto toPop = the_stack.back();
 		the_stack.pop_back();
@@ -37,7 +38,7 @@ public:
 	//Pushes onto the stack. Checks to make sure container doesn't exceed the size and if passed in element matches the type in the stack.
 	template<typename P>
 	void push(P p) { 
-		//if (full()) throw overflow_error;
+		if (full()) throw out_of_range("Stack overflow");
 		assert(typeid(T) == typeid(P));
 		the_stack.push_back(p); 
 	}
@@ -80,7 +81,7 @@ public:
 		return top;
 	}
 	bool pop() {
-		//if (empty()) throw underflow_error;
+		if (empty()) throw out_of_range("Stack underflow");
 
 		auto toPop = top();
 		bool_proxy byte{ the_stack[topIndex / 8], topIndex % 8 };
@@ -90,7 +91,7 @@ public:
 	}
 
 	void push(bool b) {
-		//if (full()) throw overflow_error;
+		if (full()) throw out_of_range("Stack overflow");
 		topIndex += 1;
 		bool_proxy byte{ the_stack[topIndex / 8], topIndex % 8 };
 		byte = b;
@@ -99,11 +100,9 @@ public:
 	void clear() { the_stack.reset(nullptr); }
 	inline int size() const { return topIndex + 1; }
 	inline bool empty() const { return topIndex == 0; }
-	inline bool full() const { return topIndex == the_max_size - 1; }
+	inline bool full() const { return size() == the_max_size; }
 	
 private:
-	//bool get(int i) const { return (the_stack[i / 8] >> i % 8) & 1; }
-
 	int the_max_size;
 	int topIndex;
 	unique_ptr<unsigned char[]> the_stack;
@@ -122,10 +121,10 @@ int main() {
 	boolStack.push(true);
 	boolStack.push(false);
 	boolStack.push(true);
-	cout << boolalpha << "Now popping the top : " << boolStack.pop() << endl;
+	cout << boolalpha << "Now popping the top(of size " << boolStack.size() << "): ";
+	cout << boolStack.pop() << endl;
 	cout << "The new top is " << boolStack.top() << endl;
-
-
+	boolStack.clear();
 
 	system("pause");
 	return 0;

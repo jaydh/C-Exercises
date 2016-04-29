@@ -27,7 +27,7 @@ public:
 	
 	//Pops from the stack with a temp variable
 	T pop() { 
-		if (stack.empty()) throw underflow_error;
+		//if (empty()) throw underflow_error;
 
 		auto toPop = the_stack.back();
 		the_stack.pop_back();
@@ -37,15 +37,15 @@ public:
 	//Pushes onto the stack. Checks to make sure container doesn't exceed the size and if passed in element matches the type in the stack.
 	template<typename P>
 	void push(P p) { 
-		if (stack.full()) throw overflow_error;
+		//if (full()) throw overflow_error;
 		assert(typeid(T) == typeid(P));
 		the_stack.push_back(p); 
 	}
 
-	void clear() { the_stack.clear(); }
-	int size() const { return the_stack.size(); }
-	bool full() const { return the_stack.size() == the_max_size; }
-	bool empty() const { return the_stack.empty(); }
+	inline void clear() { the_stack.clear(); }
+	inline int size() const { return the_stack.size(); }
+	inline bool full() const { return the_stack.size() == the_max_size; }
+	inline bool empty() const { return the_stack.empty(); }
 
 private: 
 	const int the_max_size;
@@ -72,16 +72,40 @@ public:
 		unsigned char mask;
 	};
 
-	explicit genStack(int size = 0) : the_max_size(size), the_stack(new unsigned char[(the_max_size + 7) / 8 ]) {}
-	~genStack() { the_stack.reset; }
-	 
+	explicit genStack(int size = 0) : the_max_size(size), the_stack(new unsigned char[(the_max_size + 7) / 8]) { topIndex = -1; }
+	~genStack() { clear(); }
 
-	inline unsigned char top() {	
-		auto temp = the_stack.get();
+	inline bool top() const { 
+		bool_proxy top{ the_stack[topIndex / 8], topIndex % 8 };
+		return top;
 	}
+	bool pop() {
+		//if (empty()) throw underflow_error;
+
+		auto toPop = top();
+		bool_proxy byte{ the_stack[topIndex / 8], topIndex % 8 };
+		topIndex -= 1;
+		byte = false;
+		return toPop;
+	}
+
+	void push(bool b) {
+		//if (full()) throw overflow_error;
+		topIndex += 1;
+		bool_proxy byte{ the_stack[topIndex / 8], topIndex % 8 };
+		byte = b;
+	}
+
+	void clear() { the_stack.reset(nullptr); }
+	inline int size() const { return topIndex + 1; }
+	inline bool empty() const { return topIndex == 0; }
+	inline bool full() const { return topIndex == the_max_size - 1; }
 	
 private:
+	//bool get(int i) const { return (the_stack[i / 8] >> i % 8) & 1; }
+
 	int the_max_size;
+	int topIndex;
 	unique_ptr<unsigned char[]> the_stack;
 };
 
@@ -91,6 +115,17 @@ int main() {
 	G.push(string("Just push"));
 	G.push(string("More pushing. Force push."));
 	cout << G.pop() << endl;;
+
+	genStack<bool> boolStack(10);
+	cout << "Pushing {true, true, false, true} to bool specialization of generic stack." << endl;
+	boolStack.push(true);
+	boolStack.push(true);
+	boolStack.push(false);
+	boolStack.push(true);
+	cout << boolalpha << "Now popping the top : " << boolStack.pop() << endl;
+	cout << "The new top is " << boolStack.top() << endl;
+
+
 
 	system("pause");
 	return 0;

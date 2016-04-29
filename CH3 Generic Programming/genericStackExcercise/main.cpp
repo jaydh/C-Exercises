@@ -6,6 +6,9 @@ I interpret the problem to mean the stack can contain any value type, but only o
 
 3.11.7 Stack of bool
 Specialize your stack implementation from Exercise 3.11.3 for bool. Use an unsigned char for 8 bool as in Section 3.6.1.
+
+3.11.8 Stack with custom size
+Revise your stack implementation from Exercise 3.11.3( and optionally that of Exercise 3.11.7) with a user-defined size. The size is passed as the second template argument. The default should be 4096.
 */
 
 #include<stdexcept>
@@ -17,10 +20,10 @@ Specialize your stack implementation from Exercise 3.11.3 for bool. Use an unsig
 
 using namespace std;
 
-template<typename T>
+template<typename T, int the_max_size = 4096>
 class genStack{
 public:
-	explicit genStack(int size = 0) :the_max_size(size) { }
+	explicit genStack() {}
 	~genStack() {clear();}
 
 	//Returns a copy of the top element
@@ -44,17 +47,15 @@ public:
 	}
 
 	inline void clear() { the_stack.clear(); }
-	inline int size() const { return the_stack.size(); }
+	inline int size() const { return int(the_stack.size()); }
 	inline bool full() const { return the_stack.size() == the_max_size; }
 	inline bool empty() const { return the_stack.empty(); }
 
 private: 
-	const int the_max_size;
 	vector<T> the_stack;
 };
 
-
-template<>
+template<int the_max_size = 4096>
 class genStack<bool> {
 public:
 
@@ -73,7 +74,7 @@ public:
 		unsigned char mask;
 	};
 
-	explicit genStack(int size = 0) : the_max_size(size), the_stack(new unsigned char[(the_max_size + 7) / 8]) { topIndex = -1; }
+	explicit genStack(int size = 0) : the_stack(new unsigned char[(the_max_size + 7) / 8]) { topIndex = -1; }
 	~genStack() { clear(); }
 
 	inline bool top() const { 
@@ -103,19 +104,19 @@ public:
 	inline bool full() const { return size() == the_max_size; }
 	
 private:
-	int the_max_size;
 	int topIndex;
 	unique_ptr<unsigned char[]> the_stack;
 };
 
 
 int main() {
-	genStack<string> G(255);
+	genStack<string> G;
 	G.push(string("Just push"));
 	G.push(string("More pushing. Force push."));
 	cout << G.pop() << endl;;
 
-	genStack<bool> boolStack(10);
+
+	/*genStack<bool> boolStack(10);
 	cout << "Pushing {true, true, false, true} to bool specialization of generic stack." << endl;
 	boolStack.push(true);
 	boolStack.push(true);
@@ -125,7 +126,7 @@ int main() {
 	cout << boolStack.pop() << endl;
 	cout << "The new top is " << boolStack.top() << endl;
 	boolStack.clear();
-
+	*/
 	system("pause");
 	return 0;
 }

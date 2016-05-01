@@ -57,7 +57,7 @@ public:
 	fin_diff(const F& f, const T& h) : f(f), h(h) {}
 
 	T operator()(const T& x) {
-		return (f(x + h)) - f(x)) / h;
+		return (f(x + h) - f(x)) / h;
 	}
 private:
 	const F& f;
@@ -79,6 +79,10 @@ int main() {
 	i_sincos_f i_sincos(sincos, h);
 	std::cout << i_sincos(0, 4) << std::endl;
 
+	using i_findiff_f = trapezoidRule<fin_diff<exp3_t, double>, double>;
+	fin_diff<exp3_t, double> fin_diff_exp3(exp3, h);
+	i_findiff_f i_findiff(fin_diff_exp3, h);
+	std::cout << i_findiff(0, 4) << std::endl;
 	
 	system("pause");
 	return 0;

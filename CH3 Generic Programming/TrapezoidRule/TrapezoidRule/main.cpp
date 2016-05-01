@@ -19,6 +19,7 @@ double trapezoid_Rule(double f(double), double h, double from, double to) {
 	return h / 2 * (f(from) + f(to)) + (h*sum);
 }
 
+//Trapezoid rule functor object used to calculate indefinite integrals.
 template <typename F, typename T>
 class trapezoidRule {
 public:
@@ -26,7 +27,8 @@ public:
 
 	T operator()(const T from, const T to) const {
 		T sum = 0;
-		T n = (to - from)/h;
+		T n = (to - from)/h; //Number of sub-intervals
+		//Partial sums between endpoints
 		for (T j = 1; j != (n-1); j+= 1) {
 			sum += f(from + (j*h));
 		}
@@ -51,12 +53,13 @@ struct sincos_t {
 	}
 };
 
+//Finite Difference functor object
 template<typename F, typename T>
 class fin_diff {
 public:
 	fin_diff(const F& f, const T& h) : f(f), h(h) {}
 
-	T operator()(const T& x) {
+	T operator()(const T& x) const {
 		return (f(x + h) - f(x)) / h;
 	}
 private:
@@ -66,6 +69,7 @@ private:
 
 int main() {
 
+	//Step size
 	double h = 0.0001;
 	std::cout << std::fixed << trapezoid_Rule(exp3_f, h, 0, 4) << std::endl;
 
@@ -81,8 +85,8 @@ int main() {
 
 	using i_findiff_f = trapezoidRule<fin_diff<exp3_t, double>, double>;
 	fin_diff<exp3_t, double> fin_diff_exp3(exp3, h);
-	i_findiff_f i_findiff(fin_diff_exp3, h);
-	std::cout << i_findiff(0, 4) << std::endl;
+	i_findiff_f i_findiff{ fin_diff_exp3, h };
+	std::cout << i_findiff(0.0, 4.0) << std::endl;
 	
 	system("pause");
 	return 0;

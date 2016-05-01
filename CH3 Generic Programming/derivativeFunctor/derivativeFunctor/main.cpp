@@ -46,6 +46,10 @@ int main() {
 	dd_tD_f dd_tD_o(d_tD_o, h);
 	cout << dd_tD_o(2.0) << endl;
 
+	//Lambda implementation of derivative and function to be derived
+	auto toDerive = ([](double x) {return 2 * cos(x) + pow(x, 2); });
+	auto derivative = ([h](auto f, auto h, auto x) {return (f(x + h) - f(x)) / h; });
+	cout << derivative(toDerive, h, 2.0);
 	cin.get();
 	return 0;
 }

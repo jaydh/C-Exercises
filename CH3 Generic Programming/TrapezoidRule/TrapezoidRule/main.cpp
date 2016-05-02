@@ -86,7 +86,7 @@ int main() {
 	using i_findiff_f = trapezoidRule<fin_diff<exp3_t, double>, double>;
 	fin_diff<exp3_t, double> fin_diff_exp3(exp3, h);
 	i_findiff_f i_findiff{ fin_diff_exp3, h };
-	std::cout << i_findiff(0.0, 4.0) << std::endl;
+	std::cout << i_findiff(0, 4) << std::endl;
 	
 	system("pause");
 	return 0;

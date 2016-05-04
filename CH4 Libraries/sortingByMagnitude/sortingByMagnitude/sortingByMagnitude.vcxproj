@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{68D1E11F-B827-444D-8DED-9B51FD1548C9}</ProjectGuid>
+    <ProjectGuid>{620237E1-060A-4EE5-A4ED-F4BA0D3C5005}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>derivativeFunctor</RootNamespace>
+    <RootNamespace>sortingByMagnitude</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -146,7 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="\\mac\Home\Desktop\Git\C-Plus-Plus-Exercises\CH3 Generic Programming\derivativeFunctor\derivativeFunctor\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

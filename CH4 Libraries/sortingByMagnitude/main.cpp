@@ -17,9 +17,12 @@ int main() {
 	std::vector<double> v1 { -9.3, -7.4, -3.8, -0.4, 1.3, 3.9, 5.4, 8.2};
 	std::vector<double> v2 = v1;
 	magnitudeSort<double> m;
+	
+	//Sorts the vectors by magnitude
 	std::sort(v1.begin(), v1.end(), m);
 	std::sort(v2.begin(), v2.end(), [](double i, double j) {return std::abs(i) < std::abs(j); });
 
+	//Prints contents of the vectors
 	for (auto x : v1) {
 		std::cout << x << " ";
 	}

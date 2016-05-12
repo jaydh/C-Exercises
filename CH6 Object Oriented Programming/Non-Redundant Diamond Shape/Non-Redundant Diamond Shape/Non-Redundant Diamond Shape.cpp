@@ -11,45 +11,64 @@ using namespace std;
 class person {
 public: 
 	person() {}
-	explicit person(const string& name) : name(name){}
+	explicit person(const string& name) : id(name) { message = "My name is "; }
 
-	void set_name(const string& n) { name = n; }
-	string get_name() const { return name; }
-	virtual void my_infos() const { cout << "My name is " << name << endl; }
+	void set_name(const string& n) { id = n; }
+	void set_message(const string& m) { message = m; }
+	string get_name() const { return id; }
+	virtual void my_infos() const { cout << message << id << endl; }
 	virtual void all_info() const { my_infos(); }
+
 private:
-	string name;
+	string id;
+	string message;
 };
 
 class student
-	: public virtual person
+	: virtual public person
 {
 public:
-	student(const string& name, const string& passed) : person(name), passed(passed) {}
-	virtual void my_infos() const { cout << "I passed the following grades: " << passed << endl;}
+	student(const string& name, const string& passed) : person(name), id(passed) { message = "I passed the following grades: "; }
 	
+	virtual void my_infos() const override { cout << message << id << endl; }
+	virtual void all_info() const override {
+		person::my_infos();
+		my_infos();
+	}
+
+protected :
+	student(const string& passed) : id(passed) { message = "I passed the following grades: "; }
 private:
-	string passed;
+	string id;
+	string message;
 };
 
 class mathematician : 
-	public virtual person{
+	virtual public person{
 public:
-	mathematician(const string& name, const string& proved) : person(name), proved(proved) {}
-	virtual void my_infos() const override { cout << "I proved : " << proved << endl; }
+	mathematician(const string& name, const string& proved) : person(name), id(proved) { message = "I proved: "; }
+	virtual void my_infos() const override { cout << message << id << endl; }
+	virtual void all_info() const override {
+		person::my_infos();
+		my_infos();
+	}
+protected:
+	mathematician(const string& proved) : id(proved) { message = "I proved: "; }
 
 private:
-	string proved;
+	string id;
+	string message;
 };
 class math_student :
 	public student, public mathematician {
 public:
-	math_student(const string& name, const string& passed, const string& proved) : student(name, passed), mathematician(name, proved){}
-	
+	math_student(const string& name, const string& passed, const string& proved) : person(name), student(passed), mathematician(proved){}
 	virtual void my_infos() const override {
+		person::my_infos();
 		student::my_infos();
 		mathematician::my_infos();
 	}
+	virtual void all_info() const override { my_infos(); }
 };
 
 int main()

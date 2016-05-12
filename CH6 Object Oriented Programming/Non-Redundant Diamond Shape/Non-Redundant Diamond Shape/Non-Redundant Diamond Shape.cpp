@@ -11,69 +11,68 @@ using namespace std;
 class person {
 public: 
 	person() {}
-	explicit person(const string& name) : id(name) { message = "My name is "; }
+	person(const string& name) : id(name) {}
 
 	void set_name(const string& n) { id = n; }
-	void set_message(const string& m) { message = m; }
 	string get_name() const { return id; }
-	virtual void my_infos() const { cout << message << id << endl; }
+	virtual void my_infos() const { cout << "My name is " << id << endl; }
 	virtual void all_info() const { my_infos(); }
 
 private:
 	string id;
-	string message;
 };
 
 class student
 	: virtual public person
 {
 public:
-	student(const string& name, const string& passed) : person(name), id(passed) { message = "I passed the following grades: "; }
+	student(const string& name, const string& passed) : person(name), id(passed) {}
 	
-	virtual void my_infos() const override { cout << message << id << endl; }
+	virtual void my_infos() const override { cout << "I passed the following grades: " << id << endl; }
 	virtual void all_info() const override {
 		person::my_infos();
-		my_infos();
+		student::my_infos();
 	}
 
-protected :
-	student(const string& passed) : id(passed) { message = "I passed the following grades: "; }
 private:
 	string id;
-	string message;
 };
 
 class mathematician : 
 	virtual public person{
 public:
-	mathematician(const string& name, const string& proved) : person(name), id(proved) { message = "I proved: "; }
-	virtual void my_infos() const override { cout << message << id << endl; }
+	mathematician(const string& name, const string& proved) : person(name), id(proved) {}
+	virtual void my_infos() const override { cout << "I proved: " << id << endl; }
 	virtual void all_info() const override {
 		person::my_infos();
-		my_infos();
+		mathematician::my_infos();
 	}
-protected:
-	mathematician(const string& proved) : id(proved) { message = "I proved: "; }
-
 private:
 	string id;
-	string message;
 };
+
 class math_student :
 	public student, public mathematician {
 public:
-	math_student(const string& name, const string& passed, const string& proved) : person(name), student(passed), mathematician(proved){}
-	virtual void my_infos() const override {
+	math_student(const string& name, const string& passed, const string& proved) : person(name), student(name, passed), mathematician(name, proved) {}
+	virtual void my_infos() const override {}
+	virtual void all_info() const override {
 		person::my_infos();
 		student::my_infos();
 		mathematician::my_infos();
 	}
-	virtual void all_info() const override { my_infos(); }
 };
 
 int main()
 {
+	person jay("Jay");
+	student jill("Jill", "Creative Writing");
+	mathematician sophie("Sophie", "Riemann Hypothesis");
 	math_student bob("Robert Robson", "Algebra", "Fermat's Last Theorem");
+	
+	jay.all_info();
+	jill.all_info();
+	sophie.all_info();
 	bob.all_info();
 
 	cin.get();

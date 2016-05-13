@@ -5,12 +5,27 @@ Revise the vector example from Chapter 2. Introduce the base class vector_expres
 
 #include "stdafx.h"
 #include<memory>
+#include <iostream>
+#include<assert.h>
 
 template<typename T>
 class vector_expression{
+protected:
+	void check_size(int that_size) const { assert(my_size == that_size); }
+	void check_index(int i) const { assert(i >= 0 && i < my_size); }
 public:
 	vector_expression(int my_size = 0): my_size(my_size), data(new double[my_size]) {};
-	T operator()(int i) { return data[i]; }
+	const T& operator()(int i) const
+	{
+		check_index(i);
+		return data[i];
+	}
+
+	T& operator()(int i)
+	{
+		check_index(i);
+		return data[i];
+	}
 	int size() { return my_size; }
 	int size() const { return my_size;}
 
@@ -23,37 +38,28 @@ template<typename T>
 class vector
 	:public vector_expression<T>
 {
-	vector(unsigned my_size = 0) : my_size(my_size), data(new double[my_size]) {}
+public:
+	vector(int my_size = 0) : my_size(my_size), data(new T[my_size]), vector_expression{ my_size } {}
+
 	vector(const vector& that)
-		: my_my_size(that.my_my_size), data(new double[my_my_size])
+		: my_size(that.my_size), data(new T[my_size])
 	{
-		for (int i = 0; i<my_my_size; ++i)
-			data[i] = that.data[i];
+		std::copy(&that.data[0], &that.data[that.my_size], &data[0]);
 	}
 
-	void operator=(const vector& that)
+	vector& operator=(const vector& that)
 	{
-		assert(that.my_my_size == my_my_size);
-		for (int i = 0; i<my_my_size; ++i)
-			data[i] = that.data[i];
+		check_size(that.my_size);
+		std::copy(&that.data[0], &that.data[that.my_size], &data[0]);
+		return *this;
 	}
 
-	double& operator[](int i) const {
-		assert(i >= 0 && i<my_my_size);
-		return data[i];
-	}
-
-	double& operator[](int i) {
-		assert(i >= 0 && i<my_my_size);
-		return data[i];
-
-	}
-
-	vector operator+(const vector& that) const {
-		assert(that.my_my_size == my_my_size);
-		vector sum(my_my_size);
-		for (int i = 0; i < my_my_size; ++i)
-			sum[i] = (*this)[i] + that[i];
+	vector operator+(const vector& that) const
+	{
+		check_size(that.my_size);
+		vector sum(my_size);
+		for (int i = 0; i < my_size; ++i)
+			sum[i] = data[i] + that[i];
 		return sum;
 	}
 private:
@@ -61,7 +67,7 @@ private:
 	std::unique_ptr<T[]> data;
 };
 
-template<typename T>
+/*template<typename T>
 class ones 
 	:public vector_expression<T>, public vector<T>
 {
@@ -70,10 +76,21 @@ public:
 private:
 	int my_size;
 	std::unique_ptr<T[]> data;
-};
+};*/
 
 int main()
 {
+	vector_expression<double> v{4};
+	v(0) = 1, v(1) = 2, v(2) = 3, v(3) = 4;
+	vector<double> vec{4};
+	vec(0) = 1, vec(1) = 2, vec(2) = 3, vec(3) = 4;
+	
+	for (int i = 0; i != v.size(); ++i) {
+		std::cout << v(i) << " " << vec(i) << std::endl;
+	}
+
+	std::cin.get();
+
     return 0;
 }
 

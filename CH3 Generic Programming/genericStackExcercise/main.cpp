@@ -48,6 +48,7 @@ public:
 
 	inline void clear() { the_stack.clear(); }
 	inline int size() const { return int(the_stack.size()); }
+	inline int capacity() const { return the_max_size; }
 	inline bool full() const { return the_stack.size() == the_max_size; }
 	inline bool empty() const { return the_stack.empty(); }
 
@@ -55,8 +56,8 @@ private:
 	vector<T> the_stack;
 };
 
-template<>
-class genStack<bool> {
+template<int the_max_size>
+class genStack<bool, the_max_size> {
 public:
 
 	//Proxy class copied from p.138
@@ -74,7 +75,7 @@ public:
 		unsigned char mask;
 	};
 
-	explicit genStack(int size = 0) : the_stack(new unsigned char[(the_max_size + 7) / 8]) { topIndex = -1; }
+	explicit genStack() : the_stack(new unsigned char[(the_max_size + 7) / 8]) { topIndex = -1; }
 	~genStack() { clear(); }
 
 	inline bool top() const { 
@@ -100,25 +101,27 @@ public:
 
 	void clear() { the_stack.reset(nullptr); }
 	inline int size() const { return topIndex + 1; }
+	inline int capacity() const { return the_max_size; }
 
 	inline bool empty() const { return topIndex == 0; }
 	inline bool full() const { return size() == the_max_size; }
 	
 private:
 	int topIndex;
-	int the_max_size = 4096;
 	unique_ptr<unsigned char[]> the_stack;
 };
 
 
 int main() {
 	genStack<string> G;
+	cout << "The capacity of genstack<string> G (should be default 4096) is : " << G.capacity() << endl;
 	G.push(string("Just push"));
 	G.push(string("More pushing. Force push."));
 	cout << G.pop() << endl;;
 
 
-	genStack<bool> boolStack(10);
+	genStack<bool, 10> boolStack;
+	cout << "The capacity of genStack<bool> boolStack(10) is :" << boolStack.capacity() << endl;
 	cout << "Pushing {true, true, false, true} to bool specialization of generic stack." << endl;
 	boolStack.push(true);
 	boolStack.push(true);
@@ -128,6 +131,10 @@ int main() {
 	cout << boolStack.pop() << endl;
 	cout << "The new top is " << boolStack.top() << endl;
 	boolStack.clear();
+
+	cout << "Creating default sized boolStack..." << endl;
+	genStack<bool> boolStackDefault;
+	cout << "The capacity of genStack<bool> boolStackDefault (should be 4096) is : " << boolStackDefault.capacity() << endl;
 
 	system("pause");
 	return 0;

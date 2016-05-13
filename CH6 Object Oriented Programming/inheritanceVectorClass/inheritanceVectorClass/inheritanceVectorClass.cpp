@@ -10,7 +10,6 @@ Revise the vector example from Chapter 2. Introduce the base class vector_expres
 
 template<typename T>
 class vector_expression{
-protected:
 	void check_size(int that_size) const { assert(my_size == that_size); }
 	void check_index(int i) const { assert(i >= 0 && i < my_size); }
 public:
@@ -73,11 +72,9 @@ class ones
 public:
 	ones(int my_size = 0) : my_size(my_size), data(new int[my_size]), vector_expression{ my_size }{
 		for (int i = 0; i != my_size; ++i) {
-			data[i] = 1;
+			(*this)(i) = 1;
 		}
 	}
-
-
 private:
 	int my_size;
 	std::unique_ptr<int[]> data;

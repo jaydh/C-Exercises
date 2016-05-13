@@ -55,7 +55,7 @@ private:
 	vector<T> the_stack;
 };
 
-template<int the_max_size = 4096>
+template<>
 class genStack<bool> {
 public:
 
@@ -100,11 +100,13 @@ public:
 
 	void clear() { the_stack.reset(nullptr); }
 	inline int size() const { return topIndex + 1; }
+
 	inline bool empty() const { return topIndex == 0; }
 	inline bool full() const { return size() == the_max_size; }
 	
 private:
 	int topIndex;
+	int the_max_size = 4096;
 	unique_ptr<unsigned char[]> the_stack;
 };
 
@@ -116,7 +118,7 @@ int main() {
 	cout << G.pop() << endl;;
 
 
-	/*genStack<bool> boolStack(10);
+	genStack<bool> boolStack(10);
 	cout << "Pushing {true, true, false, true} to bool specialization of generic stack." << endl;
 	boolStack.push(true);
 	boolStack.push(true);
@@ -126,7 +128,7 @@ int main() {
 	cout << boolStack.pop() << endl;
 	cout << "The new top is " << boolStack.top() << endl;
 	boolStack.clear();
-	*/
+
 	system("pause");
 	return 0;
 }

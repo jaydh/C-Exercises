@@ -14,7 +14,7 @@ protected:
 	void check_size(int that_size) const { assert(my_size == that_size); }
 	void check_index(int i) const { assert(i >= 0 && i < my_size); }
 public:
-	vector_expression(int my_size = 0): my_size(my_size), data(new double[my_size]) {};
+	vector_expression(int my_size = 0): my_size(my_size), data(new T[my_size]) {};
 	const T& operator()(int i) const
 	{
 		check_index(i);
@@ -67,32 +67,20 @@ private:
 	std::unique_ptr<T[]> data;
 };
 
-template<typename T>
 class ones 
-	:public vector_expression<T>
+	:public vector_expression<int>
 {
 public:
-	ones(int my_size = 0) : my_size(my_size), data(new double[my_size]), vector_expression{ my_size }{
+	ones(int my_size = 0) : my_size(my_size), data(new int[my_size]), vector_expression{ my_size }{
 		for (int i = 0; i != my_size; ++i) {
 			data[i] = 1;
 		}
 	}
 
-	const T& operator()(int i) const
-	{
-		check_index(i);
-		return data[i];
-	}
-
-	T& operator()(int i)
-	{
-		check_index(i);
-		return data[i];
-	}
 
 private:
 	int my_size;
-	std::unique_ptr<T[]> data;
+	std::unique_ptr<int[]> data;
 };
 
 int main()
@@ -101,7 +89,7 @@ int main()
 	v(0) = 1, v(1) = 2, v(2) = 3, v(3) = 4;
 	vector<double> vec{4};
 	vec(0) = 1, vec(1) = 2, vec(2) = 3, vec(3) = 4;
-	ones<double> onesV{ 4 };
+	ones onesV{ 4 };
 	
 	for (int i = 0; i != v.size(); ++i) {
 		std::cout << v(i) << " " << vec(i) << " " << onesV(i) << std::endl;

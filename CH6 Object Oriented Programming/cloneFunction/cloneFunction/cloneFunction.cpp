@@ -4,10 +4,13 @@ Write a CRTP class for a member function name clone() that copies the current ob
 */
 
 #include "stdafx.h"
+#include<vector>
+using namespace std;
 
 template<typename T>
-class toClone {
-
+class cloneableVector : public vector<T> {
+public:
+	T clone() { new T(static_cast<Derived const &>(*this)); }
 };
 
 int main()
